@@ -1,4 +1,4 @@
-#app {
+/* #app {
     height: 100%;
   }
   html,
@@ -27,7 +27,7 @@
     background: #fff;
   
     /* Center slide text vertically */
-    display: flex;
+    /* display: flex;
     justify-content: center;
     align-items: center;
   }
@@ -53,5 +53,4 @@
   .swiper-pagination-bullet-active {
     color: #fff;
     background: #007aff;
-  }
-  
+  } */

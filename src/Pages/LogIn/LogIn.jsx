@@ -1,31 +1,41 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import img from "../../assets/others/authentication2.png"
-import { loadCaptchaEnginge,  validateCaptcha,  LoadCanvasTemplate } from 'react-simple-captcha';
+import { loadCaptchaEnginge, validateCaptcha, LoadCanvasTemplate } from 'react-simple-captcha';
+import { AuthContext } from "../../providers/AuthProviders";
+import { Link } from "react-router-dom";
 
 const LogIn = () => {
     const captchaRef = useRef(null);
     const [disabled, setDisabled] = useState(true);
 
-    useEffect(()=>{
-        loadCaptchaEnginge(3);
-    },[])
+    const { signIn } = useContext(AuthContext);
 
-    const handleLogIn = event =>{
+
+    useEffect(() => {
+        loadCaptchaEnginge(3);
+    }, [])
+
+    const handleLogIn = event => {
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password)
+        console.log(email, password);
+        signIn(email, password)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+            })
     }
 
-    const handleValidateCaptcha =()=>{
+    const handleValidateCaptcha = () => {
         const user_captcha_value = captchaRef.current.value;
-        if (validateCaptcha(user_captcha_value, false)==true) {
+        if (validateCaptcha(user_captcha_value, false) == true) {
             setDisabled(false)
         }
-   
+
         else {
-            
+
             setDisabled(true)
         }
     }
@@ -57,14 +67,15 @@ const LogIn = () => {
                         </div>
                         <div className="form-control">
                             <label className="label">
-                            <LoadCanvasTemplate />
+                                <LoadCanvasTemplate />
                             </label>
                             <input onChange={handleValidateCaptcha} type="text" ref={captchaRef} placeholder="Type The Captcha" className="input input-bordered" />
-                            
+
 
                         </div>
                         <div className="form-control mt-6">
-                            <button disabled={disabled} className="btn btn-primary">Login</button>
+                            <button disabled={disabled} className="btn btn-primary mb-2">Login</button>
+                            <Link to="/signUp"> New Here?  <span className="link link-hover">Go to SignUp</span></Link>
                         </div>
                     </form>
                 </div>
