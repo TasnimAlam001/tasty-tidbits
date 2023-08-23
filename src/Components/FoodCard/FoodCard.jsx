@@ -1,7 +1,51 @@
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProviders";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 
 const FoodCard = ({item}) => {
     const {name, image,recipe,price}=item;
+    const {user} = useContext(AuthContext)
+    const navigate = useNavigate()
+
+
+    const handleAddToCart = item =>{
+        console.log(item)
+        if(user){
+            fetch('http://localhost:5000/carts')
+            .then(res=>res.json())
+            .then(data=>{
+                if(data.insertedId){
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Successfully added to the cart',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+
+
+                }
+            })
+        }
+        else{
+            Swal.fire({
+                title: 'OPPSS!!',
+                text: "You have to Login first to add to cart",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Let`s Login'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  navigate('/login')
+                }
+              })
+        }
+    }
+
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
             <figure><img src={image} alt="Foods" /></figure>
@@ -10,7 +54,7 @@ const FoodCard = ({item}) => {
                 <h2 className="card-title">{name}</h2>
                 <p>{recipe}</p>
                 <div className="card-actions justify-end">
-                    <button className="btn bg-slate-200 btn-outline my-5 border-0 border-b-4 border-orange-400">Add to cart</button>
+                    <button onClick={()=>handleAddToCart(item)} className="btn bg-slate-200 btn-outline my-5 border-0 border-b-4 border-orange-400">Add to cart</button>
                 </div>
             </div>
         </div>
