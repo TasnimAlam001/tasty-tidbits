@@ -3,6 +3,7 @@ import img from "../../assets/others/authentication2.png"
 import { loadCaptchaEnginge, validateCaptcha, LoadCanvasTemplate } from 'react-simple-captcha';
 import { AuthContext } from "../../providers/AuthProviders";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 const LogIn = () => {
     const captchaRef = useRef(null);
@@ -81,6 +82,8 @@ const LogIn = () => {
                             <Link to="/signUp"> New Here?  <span className="link link-hover">Go to SignUp</span></Link>
                         </div>
                     </form>
+                   
+                    <SocialLogin></SocialLogin>
                 </div>
             </div>
         </div>

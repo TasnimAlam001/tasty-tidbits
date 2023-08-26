@@ -3,6 +3,8 @@ import img from "../../assets/others/authentication2.png"
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
+import Swal from "sweetalert2";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 
 
@@ -13,15 +15,28 @@ const SignUp = () => {
     const { createUser, updateUserProfile, logOut } = useContext(AuthContext)
 
     const onSubmit = data => {
-        console.log("user: ", data.email, data.password, data.photoURL)
+
         createUser(data.email, data.password)
             .then(result => {
-
                 const loggedUser = result.user;
                 console.log("loggedUser:", loggedUser);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log("name and photo updated")
+                        const newUser = {name:data.name, email:data.email, role:"user"}
+                        fetch(`http://localhost:5000/users`,{
+                            method: 'POST',
+                            headers:{
+                                "content-type" : "application/json"
+                            },
+                            body: JSON.stringify(newUser)
+                        })
+                        Swal.fire({
+                            position: 'top-center',
+                            icon: 'success',
+                            title: 'Successfully Signed up, Please Login for further process.',
+                            showConfirmButton: true,
+                            
+                          })
                     })
                     .then(error => console.log(error))
                 reset()
@@ -102,6 +117,7 @@ const SignUp = () => {
                             <Link to="/login"> Already Have an account?  <span className="link link-hover">Go to LogIn</span></Link>
                         </div>
                     </form>
+                    <SocialLogin></SocialLogin>
                 </div>
             </div>
         </div>

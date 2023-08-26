@@ -2,12 +2,43 @@ import { FaTrashAlt } from "react-icons/fa";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 import useCart from "../../../Hooks/useCart";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const MyCart = () => {
     //TODO: Helmet
-    const [cart] = useCart();
+    const [cart , refetch] = useCart();
     const total = cart.reduce((sum, item) => item.price + sum, 0)
+    const handleDelete = (item) => {
+        Swal.fire({
+            title: `Are you sure, You want to DELETE ${item.name}?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:5000/carts/${item._id}`,{
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.deletedCount > 0) {
+                            refetch();
+                            Swal.fire(
+                                'Deleted!',
+                                `${item.name} file has been deleted.`,
+                                'success'
+                            )
+
+                        }
+                    })
+
+            }
+        })
+    }
 
     return (
         <div className="">
@@ -33,7 +64,7 @@ const MyCart = () => {
                                         <th>Item Image</th>
                                         <th>Item Name</th>
                                         <th>Price</th>
-                                        
+
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -57,9 +88,9 @@ const MyCart = () => {
                                                 {item.name}
 
                                             </td>
-                                            <td>{item.price}</td> 
+                                            <td>{item.price}</td>
                                             <th>
-                                                <button className="btn bg-red-700 text-white"><FaTrashAlt></FaTrashAlt> </button>
+                                                <button onClick={() => handleDelete(item)} className="btn bg-red-700 text-white"><FaTrashAlt></FaTrashAlt> </button>
                                             </th>
                                         </tr>)
                                     }
