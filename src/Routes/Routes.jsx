@@ -11,6 +11,7 @@ import SignUp from "../Pages/SignUp/SignUp";
 import Dashboard from "../Layout/Dashboard";
 import MyCart from "../Pages/Dashboard/MyCart/MyCart";
 import UserHome from "../Pages/Dashboard/UserHome/UserHome";
+import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
   export const router = createBrowserRouter([
     {
       path: "/",
@@ -49,6 +50,10 @@ import UserHome from "../Pages/Dashboard/UserHome/UserHome";
         {
           path: 'userHome',
           element: <UserHome></UserHome>
+        },
+        {
+          path: 'allUsers',
+          element: <AllUsers></AllUsers>
         }
       ]
     }

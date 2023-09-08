@@ -22,28 +22,36 @@ const SignUp = () => {
                 console.log("loggedUser:", loggedUser);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        const newUser = {name:data.name, email:data.email, role:"user"}
-                        fetch(`http://localhost:5000/users`,{
+                        const newUser = { name: data.name, email: data.email, role: "user" }
+                        fetch(`http://localhost:5000/users`, {
                             method: 'POST',
-                            headers:{
-                                "content-type" : "application/json"
+                            headers: {
+                                "content-type": "application/json"
                             },
                             body: JSON.stringify(newUser)
                         })
-                        Swal.fire({
-                            position: 'top-center',
-                            icon: 'success',
-                            title: 'Successfully Signed up, Please Login for further process.',
-                            showConfirmButton: true,
-                            
-                          })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.insertedId) {
+                                    reset()
+                                    logOut()
+                                        .then(() => { })
+                                        .then(error => console.log(error))
+                                    navigate("/login")
+                                    Swal.fire({
+                                        position: 'top-center',
+                                        icon: 'success',
+                                        title: 'Successfully Signed up, Please Login for further process.',
+                                        showConfirmButton: true,
+
+                                    })
+
+
+                                }
+                            })
+
                     })
                     .then(error => console.log(error))
-                reset()
-                logOut()
-                    .then(() => { })
-                    .then(error => console.log(error))
-                navigate("/login")
             })
 
     };

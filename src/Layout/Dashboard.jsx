@@ -4,23 +4,41 @@ import { FaBook, FaCalendarAlt, FaHome, FaListUl, FaPhoneAlt, FaShoppingBag, FaS
 
 const Dashboard = () => {
 
+
+    //TODO: fetch Admin
+    const isAdmin = true;
+
     const option = <>
         <ul className="menu p-4 w-80 min-h-full bg-[#D1A054] md:text-2xl z-20">
             {/* Sidebar content here */}
             <h1 className="font-bold text-black text-3xl my-5 text-center pb-14">Tasty Tidbits</h1>
 
 
+            {
+                isAdmin ? <>
+                    <li><NavLink to="/dashboard/home"><FaHome></FaHome>Admin Home</NavLink></li>
+                    <li><NavLink to="/dashboard/additem"><FaUtensils></FaUtensils>Add Items</NavLink></li>
+                    <li><NavLink to="/dashboard/manageitem"><FaWallet></FaWallet>Manage Items</NavLink></li>
+                    <li><NavLink to="/dashboard/history"><FaBook></FaBook>Manage Bookings</NavLink></li>
+                    <li><NavLink to="/dashboard/allUsers"><FaUsers></FaUsers>All Users</NavLink></li>
+
+
+                </> : <>
+                    <li><NavLink to="/dashboard/userHome"><FaHome></FaHome> User Home</NavLink></li>
+                    <li><NavLink to="/dashboard/reservations"><FaCalendarAlt></FaCalendarAlt> Reservations</NavLink></li>
+                    <li><NavLink to="/dashboard/paymentHistory"><FaWallet></FaWallet> Payment History</NavLink></li>
+                    <li><NavLink to="/dashboard/myCart"><FaShoppingCart></FaShoppingCart> My Cart</NavLink></li>
+
+                </>
+            }
 
 
 
-            <li><NavLink to="/dashboard/userHome"><FaHome></FaHome> User Home</NavLink></li>
-            <li><NavLink to="/dashboard/reservations"><FaCalendarAlt></FaCalendarAlt> Reservations</NavLink></li>
-            <li><NavLink to="/dashboard/paymentHistory"><FaWallet></FaWallet> Payment History</NavLink></li>
-            <li><NavLink to="/dashboard/myCart"><FaShoppingCart></FaShoppingCart> My Cart</NavLink></li>
+
 
 
             <div className="divider"></div>
-            
+
 
             <li><NavLink to="/"><FaHome></FaHome>Home</NavLink></li>
             <li><NavLink to="/menu"><FaListUl></FaListUl>Menu</NavLink></li>
