@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProviders";
 import useCart from "../../../Hooks/useCart";
+import useAdmin from "../../../Hooks/useAdmin";
 
 
 const Navbar = () => {
@@ -11,7 +12,9 @@ const Navbar = () => {
     const total = cart.reduce((sum, item) => item.price + sum, 0)
 
     //TODO: fetch Admin
-    const isAdmin = true;
+    // const isAdmin = true;
+    const [isAdmin] = useAdmin();
+    console.log("admin: ", isAdmin)
 
 
 

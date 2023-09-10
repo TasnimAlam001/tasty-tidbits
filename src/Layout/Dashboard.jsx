@@ -1,12 +1,14 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { FaBook, FaCalendarAlt, FaHome, FaListUl, FaPhoneAlt, FaShoppingBag, FaShoppingCart, FaUsers, FaUtensils, FaWallet } from "react-icons/fa";
+import useAdmin from "../Hooks/useAdmin";
 
 
 const Dashboard = () => {
 
 
     //TODO: fetch Admin
-    const isAdmin = true;
+    // const isAdmin = true;
+    const [isAdmin] = useAdmin();
 
     const option = <>
         <ul className="menu p-4 w-80 min-h-full bg-[#D1A054] md:text-2xl z-20">
@@ -17,7 +19,7 @@ const Dashboard = () => {
             {
                 isAdmin ? <>
                     <li><NavLink to="/dashboard/home"><FaHome></FaHome>Admin Home</NavLink></li>
-                    <li><NavLink to="/dashboard/additem"><FaUtensils></FaUtensils>Add Items</NavLink></li>
+                    <li><NavLink to="/dashboard/addItem"><FaUtensils></FaUtensils>Add Items</NavLink></li>
                     <li><NavLink to="/dashboard/manageitem"><FaWallet></FaWallet>Manage Items</NavLink></li>
                     <li><NavLink to="/dashboard/history"><FaBook></FaBook>Manage Bookings</NavLink></li>
                     <li><NavLink to="/dashboard/allUsers"><FaUsers></FaUsers>All Users</NavLink></li>
