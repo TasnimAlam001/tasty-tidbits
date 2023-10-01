@@ -1,15 +1,16 @@
-import { FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
-import useCart from "../../../Hooks/useCart";
-import { Link } from "react-router-dom";
+import useMenu from "../../../Hooks/useMenu";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../Hooks/useAxiousSecure";
 
 
-const MyCart = () => {
-    //TODO: Helmet
-    const [cart , refetch] = useCart();
-    const total = cart.reduce((sum, item) => item.price + sum, 0)
-    const handleDelete = (item) => {
+const ManageItems = () => {
+    const [menu, , refetch] = useMenu();
+    const [axiosSecure] = useAxiosSecure();
+
+
+    const handleDelete = item => {
         Swal.fire({
             title: `Are you sure, You want to DELETE ${item.name}?`,
             text: "You won't be able to revert this!",
@@ -20,19 +21,17 @@ const MyCart = () => {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/carts/${item._id}`,{
-                    method: 'DELETE'
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.deletedCount > 0) {
+
+                axiosSecure.delete(`/menu/${item._id}`)
+                    .then(res => {
+                        console.log('deleted res', res.data);
+                        if (res.data.deletedCount > 0) {
                             refetch();
                             Swal.fire(
                                 'Deleted!',
                                 `${item.name} file has been deleted.`,
                                 'success'
                             )
-
                         }
                     })
 
@@ -40,18 +39,18 @@ const MyCart = () => {
         })
     }
 
-    return (
-        <div className="">
-            <Link to="/order/salad"><SectionTitle subHeading="My Cart" heading="Wanna Add More?"></SectionTitle></Link>
 
+    return (
+        <div>
+            <SectionTitle subHeading="Hurry Up" heading="Manage All Items"></SectionTitle>
 
             <div className="card bg-base-100 shadow-xl w-full md:w-5/6 mx-auto z-10">
                 <div className="card-body">
                     <div className="card-title uppercase">
 
-                        <p>Total Item: {cart?.length}</p>
-                        <p>Total Price: ${total}</p>
-                        <Link to="/dashboard/payment"><button className="btn btn-warning">PAY</button></Link>
+                        <p>Total Item: {menu?.length}</p>
+
+
                     </div>
                     <div className="flex flex-col justify-center items-center">
                         <div className="overflow-x-auto  w-full pt-7">
@@ -64,13 +63,13 @@ const MyCart = () => {
                                         <th>Item Image</th>
                                         <th>Item Name</th>
                                         <th>Price</th>
-
-                                        <th>Action</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        cart.map((item, index) => <tr key={item._id}>
+                                        menu.map((item, index) => <tr key={item._id}>
                                             <th>
                                                 {index + 1}
                                             </th>
@@ -90,6 +89,9 @@ const MyCart = () => {
                                             </td>
                                             <td>{item.price}</td>
                                             <th>
+                                                <button className="btn bg-orange-500 text-white"><FaEdit></FaEdit> </button>
+                                            </th>
+                                            <th>
                                                 <button onClick={() => handleDelete(item)} className="btn bg-red-700 text-white"><FaTrashAlt></FaTrashAlt> </button>
                                             </th>
                                         </tr>)
@@ -106,10 +108,8 @@ const MyCart = () => {
                 </div>
             </div>
 
-
-
         </div>
     );
 };
 
-export default MyCart;
+export default ManageItems;
